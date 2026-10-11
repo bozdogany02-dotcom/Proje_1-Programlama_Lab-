@@ -127,6 +127,106 @@ int main() {
         fclose(dosya);
         printf("\nDosya okuma tamamlandi! Toplam %d gecerli gorev yuklendi.\n", gorev_sayisi);
     }
+    //simulasyon degiskenleri
+    int sanal_zaman = 0;
+    int secili_algoritma = 0; // 1:Shortest job, 2:Priority, 3:Round Robin, 4:Kendi algoritmam
+    int quantum_degeri = 0; //Round Robin için
+    int secim;
+
+    //ana menu
+    while(1){
+        printf("\n-------------------------------------------------------\n");
+        printf("GUNCEL ZAMAN: %d\n", sanal_zaman);
+
+        //secili algıritma
+        printf("SECILI ALGORITMA: ");
+        if(secili_algoritma == 1)printf("Shortest Job\n");
+        else if(secili_algoritma == 2)printf("Priority\n");
+        else if(secili_algoritma == 3)printf("Round Robin\n");
+        else if(secili_algoritma == 4)printf("Kendi Algoritmam\n");
+        else printf("Henuz secilmedi\n");
+        printf("-------------------------------------------------------\n");
+
+        //menu secenekleri
+        printf("1. Algoritma sec veya degistir\n");
+        printf("2. Tum gorevleri listele\n");
+        printf("3. Gorevleri durumuna gore listele\n");
+        printf("4. Gorev ID ile sorgula\n");
+        printf("5. Teknisyenlerin durumunu goster\n");
+        printf("6. Zamani 1 birim ilerlet\n");
+        printf("7. Zamani N birim ilerlet\n");
+        printf("8. Belirli bir zamana git\n");
+        printf("9. Istatistikleri goster\n");
+        printf("10. Simulasyonu sifirla\n");
+        printf("11. Cikis\n");
+        printf("-------------------------------------------------------\n");
+        printf("Seciminiz: ");
+        scanf("%d", &secim);
+
+        switch(secim){
+            case 1:
+                printf("\n--- Algoritma Secimi ---\n");
+                printf("1- Shortest Job\n");
+                printf("2- Priority\n");
+                printf("3- Round Robin\n");
+                printf("4- Kendi Algoritmam\n");
+                printf("Seciminiz: ");
+                scanf("%d", &secili_algoritma);
+
+                if(secili_algoritma == 3){
+                    printf("Round Robin icin zaman dilimi (quantum) giriniz:");
+                    scanf("%d", &quantum_degeri);
+                }
+
+                sanal_zaman = 0; //algoritma secildiginde zaman sıfırlandı
+                printf("Algoritma secildi. Zaman sifirlandi.\n");
+                break;
+
+            case 2:
+                printf("\nTum gorevler listelenecek...\n");
+                break;
+
+            case 3:
+                printf("\nGorevler durumuna gore listelenecek...\n");
+                break;
+
+            case 4:
+                printf("\nID ile sorgulama yapilacak...\n");
+                break;
+
+            case 5:
+                printf("\nTeknisyenlerin durumu gosterilecek...\n");
+                break;
+
+            case 6:
+                printf("\nZaman 1 birim ilerletilecek...\n");
+                break;
+
+            case 7:
+                printf("\nZaman N birim ilerletilecek...\n");
+                break;
+
+            case 8:
+                printf("\nBelirli bir zamana gidilecek...\n");
+                break;
+
+            case 9:
+                printf("\nIstatistikler gosterilecek...\n");
+                break;
+
+            case 10:
+                printf("\nSimulasyon sifirlanacak...\n");
+                break;
+
+            case 11:
+                printf("\nProgramdan cikiliyor...\n");
+                return 0; //programi sonlandır
+
+            default:
+                printf("Gecersiz secim! Lutfen 1-11 arasi bir deger giriniz.\n");
+                break;
+        }
+    }
 
     return 0;
 }
