@@ -183,7 +183,20 @@ int main() {
                 break;
 
             case 2:
-                printf("\nTum gorevler listelenecek...\n");
+    printf("\n--- SISTEMDEKI KAYITLI GOREVLER ---\n");
+    printf("ID\tGELIS\tSURE\tONCELIK\t\tTUR\t\tKONUM\n");
+    printf("------------------------------------------------------------\n\n");
+    for(int i = 0; i < gorev_sayisi; i++) {
+        printf("%d\t%d\t%d\t%d\t%-20s\t%s\n",
+               gorev_listesi[i].ID,
+               gorev_listesi[i].GELIS_ZAMANI,
+               gorev_listesi[i].SURE,
+               gorev_listesi[i].ONCELIK,
+               gorev_listesi[i].GOREV_TURU,
+               gorev_listesi[i].KONUM);
+    }
+    printf("------------------------------------------------------------\n");
+    printf("Toplam gecerli gorev sayisi: %d\n", gorev_sayisi);
                 break;
 
             case 3:
@@ -195,11 +208,89 @@ int main() {
                 break;
 
             case 5:
-                printf("\nTeknisyenlerin durumu gosterilecek...\n");
+    printf("\n--- TEKNISYEN DURUMLARI (ZAMAN: %d) ---\n", sanal_zaman);
+    printf("ISIM\tDURUM\t\tGOREV ID\tKONUM\t\tTOPLAM MESAI\n");
+    printf("----------------------------------------------------------------------\n");
+    for (int t = 0; t < 4; t++) {
+        printf("%s\t", teknikerler[t].isim);
+        if (teknikerler[t].Durum == 0) {
+            printf("BOSTA\t\t-\t\t-\t\t%d birim\n", teknikerler[t].Calisma_Suresi);
+        } else {
+            printf("MESGUL\t\t%d\t\t%-10s\t%d birim\n",
+                   teknikerler[t].Gorev_ID,
+                   teknikerler[t].Konum,
+                   teknikerler[t].Calisma_Suresi);
+        }
+    }
+    printf("----------------------------------------------------------------------\n");
                 break;
 
             case 6:
-                printf("\nZaman 1 birim ilerletilecek...\n");
+    sanal_zaman++;
+    printf("\n=== ZAMAN ILERLEDI ===\n");
+    printf("Yeni Sanal Zaman: %d\n", sanal_zaman);
+
+    for (int t = 0; t < 4; t++) {
+        if (teknikerler[t].Durum == 1) { // Eğer teknisyen doluysa (çalışıyorsa)
+            for (int i = 0; i < gorev_sayisi; i++) {
+                if (gorev_listesi[i].ID == teknikerler[t].Gorev_ID) { // Teknisyenin uğraştığı görevi bul
+                    gorev_listesi[i].kalan_sure--; // Görevin bitmesine 1 saat daha az kaldı
+                    teknikerler[t].Calisma_Suresi++; // Teknisyenin toplam mesaisini artır
+
+                    if (gorev_listesi[i].kalan_sure <= 0) { // Görev tamamen bittiyse
+                        gorev_listesi[i].durum = TAMAMLANDI;
+                        gorev_listesi[i].bitis_zamani = sanal_zaman;
+
+                        printf(" -> [BASARI]: %s teknisyeni %d ID'li gorevi TAMAMLADI!\n",
+                               teknikerler[t].isim, gorev_listesi[i].ID);
+
+                        // Teknisyeni yeni görevler alabilmesi için serbest bırak
+                        teknikerler[t].Durum = 0;
+                        teknikerler[t].Gorev_ID = 0;
+                    }
+                    break; // Doğru görevi bulup işledik, bu teknisyen için diğer görevlere bakmaya gerek yok
+                }
+            }
+        }
+    }
+    // Yeni gelen görevleri kontrol et
+    int yeni_gelen_gorev = 0;
+    for (int i = 0; i < gorev_sayisi; i++) {
+        // Görevin geliş zamanı geldiyse ve durumu hala HENUZ_GELMEDI ise:
+        if (gorev_listesi[i].GELIS_ZAMANI <= sanal_zaman && gorev_listesi[i].durum == HENUZ_GELMEDI) {
+            gorev_listesi[i].durum = BEKLIYOR; // Artık sistemde bekliyor!
+            printf(" -> [BILGI]: %d ID'li '%s' gorevi sisteme giris yapti ve siraya girdi!\n",
+                   gorev_listesi[i].ID, gorev_listesi[i].GOREV_TURU);
+            yeni_gelen_gorev = 1;
+        }
+    }
+
+    if (yeni_gelen_gorev == 0) {
+        printf(" -> Bu zaman diliminde sisteme yeni bir gorev girisi olmadi.\n");
+    }
+    // Boş teknisyenlere bekleyen görevleri ata (FCFS temeli)
+    for (int t = 0; t < 4; t++) {
+        if (teknikerler[t].Durum == 0) { // Teknisyen boşsa
+            for (int i = 0; i < gorev_sayisi; i++) {
+                if (gorev_listesi[i].durum == BEKLIYOR) { // Bekleyen görev bulundu
+                    // Görevi teknisyene ata
+                    teknikerler[t].Durum = 1;
+                    teknikerler[t].Gorev_ID = gorev_listesi[i].ID;
+                    strcpy(teknikerler[t].Konum, gorev_listesi[i].KONUM);
+
+                    // Görev durumunu güncelle
+                    gorev_listesi[i].durum = DEVAM_EDIYOR;
+                    gorev_listesi[i].ilk_baslama_zamani = sanal_zaman;
+                    strcpy(gorev_listesi[i].guncel_teknisyen, teknikerler[t].isim);
+
+                    printf(" -> [ATAMA]: %s teknisyeni, %d ID'li goreve basladi.\n",
+                           teknikerler[t].isim, gorev_listesi[i].ID);
+                    break; // Teknisyen bir görev aldı, diğer görevlere bakmayı bırak
+                }
+            }
+        }
+    }
+
                 break;
 
             case 7:
