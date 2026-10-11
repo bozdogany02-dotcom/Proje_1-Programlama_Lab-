@@ -220,7 +220,7 @@ int main() {
 
             case 11:
                 printf("\nProgramdan cikiliyor...\n");
-                return 0; //programi sonlandır
+                return 0; //programi sonlandı
 
             default:
                 printf("Gecersiz secim! Lutfen 1-11 arasi bir deger giriniz.\n");
