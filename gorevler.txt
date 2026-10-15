@@ -1,0 +1,30 @@
+# BİLGİSAYAR MÜHENDİSLİĞİ TEKNİK DESTEK GÖREVLERİ TEST DOSYASI
+# ID GELIS_ZAMANI SURE ONCELIK GOREV_TURU KONUM
+
+1 0 6 4 SISTEM_KURULUMU LAB_A
+2 0 4 2 PROJEKSIYON_BAKIMI DERSLIK_1
+3 0 3 3 YAZILIM_GUNCELLEME LAB_B
+4 0 5 1 AG_KONTROLU DERSLIK_2
+5 0 2 5 ANTIVIRUS_TARAMASI LAB_A
+
+# --- Hata Yakalama Testleri (Aşağıdakilerin reddedilmesi gerekir) ---
+
+# 1. Hata: Eksik veri (Konum girilmemiş)
+6 2 4 1 YAZICI_KURULUMU
+
+# 2. Hata: Geliş zamanı sıfırdan küçük olamaz
+7 -3 3 2 SES_SISTEMI_TESTI DERSLIK_3
+
+# 3. Hata: Çalışma süresi 0 veya negatif olamaz
+8 6 0 4 DOSYA_YEDEKLEME LAB_B
+
+# 4. Hata: Öncelik değeri 1-5 aralığı dışında
+9 7 2 8 RAM_YUKSELTME DERSLIK_1
+
+# 5. Hata: Yinelenen ID (ID 2 yukarıda zaten tanımlandı)
+2 8 4 1 YENI_GOREV LAB_A
+
+# --- Normal Görevlere Devam ---
+
+10 8 4 1 EKRAN_DEGISIMI LAB_B
+11 10 3 2 KLAVYE_DEGISTIRME DERSLIK_3
